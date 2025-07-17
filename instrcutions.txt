@@ -1,0 +1,60 @@
+Développer une application Laravel permettant à un studio musical de gérer ses projets et ses utilisateurs, avec un suivi d’étapes de production musicales (enregistrement, mixage, mastering, distribution) et un système de rôles sécurisé.
+•	IA de développement : Cursor (pour migrations, routes, contrôleurs, vues, etc.)
+________________________________________
+🧩 Rôles & permissions
+Rôle	Description	Accès principal
+Administrateur	Contrôle total, valide les projets et rôles.	Full Access
+Secrétariat	Gère les comptes artistes et affectations.	CRUD artistes
+Responsable studio	Suit et met à jour les étapes de production.	CRUD projets
+Artiste	Visualise ses projets, lecture seule.	Lecture
+________________________________________
+📦 Fonctionnalités clés à développer dans Cursor
+1. Gestion des utilisateurs
+•	Inscription avec validation email.
+•	Champs : nom, email, téléphone (obligatoire), mot de passe.
+•	Statut par défaut : en_attente_validation.
+•	Attribution des rôles par l’admin.
+•	Notifications lors de la validation et des changements de rôle.
+2. Gestion des projets musicaux
+•	Création par le responsable studio.
+•	Attribution à un artiste.
+•	Suivi d’étapes avec couleur :
+o	Enregistrement (bleu)
+o	Mixage (rose)
+o	Mastering (jaune)
+o	Distribution en cours (orange – admin uniquement)
+o	Distribution terminée (vert – admin uniquement)
+•	Mise à jour de l’étape => notification artiste.
+3. Tableaux de bord personnalisés
+•	Vue artiste : liste et progression colorée.
+•	Vue studio : liste des projets + édition étapes.
+•	Vue secrétariat : gestion des artistes.
+•	Vue admin : global + rôles + validations.
+4. Sécurité et logs
+•	Middleware basé sur les rôles.
+•	Authentification sécurisée.
+•	Journalisation (logs Laravel) des actions critiques.
+•	JWT possible avec Sanctum pour API mobile ultérieure.
+________________________________________
+📁 Arborescence suggérée
+pgsql
+CopierModifier
+app/
+├── Models/
+│   ├── User.php
+│   ├── Role.php
+│   └── Projet.php
+├── Http/
+│   └── Controllers/
+│       ├── AuthController.php
+│       ├── ProjetController.php
+│       └── AdminController.php
+database/
+├── migrations/
+routes/
+├── web.php
+├── api.php
+resources/
+├── views/
+│   └── dashboard/
+
