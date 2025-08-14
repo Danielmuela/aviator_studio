@@ -1,15 +1,13 @@
 # --- Build des assets (si Vite est utilisé) ---
-    FROM node:20-alpine AS nodebuild
-    WORKDIR /app
-    # Copie minimal pour utiliser le cache npm
-    COPY package*.json ./
-    RUN [ -f package.json ] && npm ci || true
-    # Copie le reste uniquement si tu as Vite; sinon ce bloc sera neutre
-    COPY . .
-    RUN [ -f package.json ] && npm run build || true
-    
-    # --- Runtime PHP (serveur) ---
-    FROM php:8.2-fpm
+FROM node:20-alpine AS nodebuild
+WORKDIR /app
+COPY package*.json ./
+RUN [ -f package.json ] && npm ci || true
+COPY . .
+RUN [ -f package.json ] && npm run build || true
+
+# --- Runtime PHP (serveur) ---
+FROM php:8.2-fpm
 
 # Installer les dépendances système
 RUN apt-get update && apt-get install -y \
@@ -30,9 +28,13 @@ RUN apt-get update && apt-get install -y \
 # Installer Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copier le projet
 WORKDIR /var/www
+
+# Copier le code source (sauf node_modules et vendor)
 COPY . .
+
+# Copier les assets compilés depuis le build Node (si Vite)
+COPY --from=nodebuild /app/public/build ./public/build
 
 # Installer les dépendances PHP
 RUN composer install --no-dev --optimize-autoloader
