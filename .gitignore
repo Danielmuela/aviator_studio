@@ -19,3 +19,9 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+/public/*.mp4
+/public/*.avi
+/public/*.mov
+/public/*.mkv
+/public/Vidéo label aviator.mp4
+/public/Aviator Music Clip.mp4
